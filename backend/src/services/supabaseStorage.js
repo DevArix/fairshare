@@ -11,11 +11,9 @@ export function isSupabaseConfigured() {
 }
 
 function authHeaders(extra = {}) {
-  return {
-    apikey: supabaseKey,
-    Authorization: `Bearer ${supabaseKey}`,
-    ...extra
-  }
+  const headers = { apikey: supabaseKey }
+  if (!supabaseKey.startsWith('sb_secret_')) headers.Authorization = `Bearer ${supabaseKey}`
+  return { ...headers, ...extra }
 }
 
 async function storageRequest(resource, options = {}) {

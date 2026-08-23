@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 
 process.env.SUPABASE_URL = 'https://example.supabase.co'
-process.env.SUPABASE_SECRET_KEY = 'test-secret'
+process.env.SUPABASE_SECRET_KEY = 'sb_secret_test'
 
 const requests = []
 global.fetch = async (url, options = {}) => {
@@ -32,5 +32,6 @@ test('Supabase storage creates buckets and persists JSON and images', async () =
   assert.match(imageUrl, /^https:\/\/example\.supabase\.co\/storage\/v1\/object\/public\/fairshare-uploads\//)
   assert.equal(requests.filter(item => item.options.method === 'POST' && item.url.endsWith('/storage/v1/bucket')).length, 4)
   assert.ok(requests.some(item => item.url.endsWith('/fairshare-data/db.json') && item.options.headers?.['x-upsert'] === 'true'))
-  assert.ok(requests.every(item => item.options.headers?.Authorization === 'Bearer test-secret'))
+  assert.ok(requests.every(item => item.options.headers?.apikey === 'sb_secret_test'))
+  assert.ok(requests.every(item => !item.options.headers?.Authorization))
 })
