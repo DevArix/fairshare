@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { downloadDatabase, ensureRemoteStorage, isSupabaseConfigured, uploadDatabase } from '../services/supabaseStorage.js'
 
 const currentFile = fileURLToPath(import.meta.url)
 const currentDir = path.dirname(currentFile)
@@ -24,6 +25,11 @@ const emptyDb = {
 let queue = Promise.resolve()
 
 export async function ensureDb() {
+  if (isSupabaseConfigured()) {
+    await ensureRemoteStorage()
+    if (!await downloadDatabase()) await uploadDatabase(emptyDb)
+    return
+  }
   try {
     await fs.access(dbPath)
   } catch {
@@ -33,14 +39,24 @@ export async function ensureDb() {
 }
 
 async function loadDb() {
-  await ensureDb()
-  const value = await fs.readFile(dbPath, 'utf8')
-  const data = JSON.parse(value)
+  let data
+  if (isSupabaseConfigured()) {
+    await ensureDb()
+    data = await downloadDatabase()
+  } else {
+    await ensureDb()
+    const value = await fs.readFile(dbPath, 'utf8')
+    data = JSON.parse(value)
+  }
   for (const key of Object.keys(emptyDb)) if (!Array.isArray(data[key])) data[key] = []
   return data
 }
 
 async function saveDb(data) {
+  if (isSupabaseConfigured()) {
+    await uploadDatabase(data)
+    return
+  }
   const tempPath = `${dbPath}.tmp`
   await fs.writeFile(tempPath, JSON.stringify(data, null, 2))
   await fs.rename(tempPath, dbPath)

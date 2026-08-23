@@ -34,6 +34,8 @@ The backend tests use an isolated JSON file and cover cent-safe splitting, balan
 
 Copy `backend/.env.example` to `backend/.env` before a real deployment and replace `JWT_SECRET`. Fill `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, and `SMTP_FROM` with the sender account details to enable password-recovery emails. Set `APP_URL` to the frontend address used in reset links. The frontend can use `frontend/.env` with `VITE_API_URL` when the API is hosted somewhere else.
 
+For durable free deployment storage, set `SUPABASE_URL` and either `SUPABASE_SECRET_KEY` or `SUPABASE_SERVICE_ROLE_KEY` on the backend. The server then keeps its JSON database in the private `fairshare-data` bucket and uploaded images in the public `fairshare-uploads` bucket, creating both buckets automatically. Without these variables, local file storage remains active for development and tests.
+
 ## Project structure
 
 ```text

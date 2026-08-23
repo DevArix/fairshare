@@ -3,6 +3,7 @@ import { makeCode, makeId } from '../utils/id.js'
 import { dashboardSummaries, groupBalances } from '../services/balanceService.js'
 import { addActivity } from '../services/activityService.js'
 import { groupView } from '../services/groupViewService.js'
+import { saveUploadedImage } from '../middleware/upload.js'
 
 const currencies = ['USD', 'EUR', 'IRT']
 
@@ -39,6 +40,7 @@ export async function createGroup(req, res, next) {
     } catch {
       throw Object.assign(new Error('دوستان انتخاب‌شده معتبر نیستند'), { status: 400 })
     }
+    const profilePicture = await saveUploadedImage(req.file)
     const group = await changeDb(db => {
       const validFriendIds = new Set(db.friendships.filter(item => item.user1Id === req.user.id || item.user2Id === req.user.id).map(item => item.user1Id === req.user.id ? item.user2Id : item.user1Id))
       if (friendIds.some(id => !validFriendIds.has(id))) throw Object.assign(new Error('فقط دوستان را می‌توان مستقیم اضافه کرد'), { status: 400 })
@@ -47,7 +49,7 @@ export async function createGroup(req, res, next) {
         id: makeId(),
         name: name.trim(),
         description: description?.trim() || '',
-        profilePicture: req.file ? `/uploads/${req.file.filename}` : null,
+        profilePicture,
         adminId: req.user.id,
         ownerId: req.user.id,
         invitationCode: makeCode(),

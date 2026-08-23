@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs'
 import { changeDb, readDb } from '../models/db.js'
 import { publicUser } from '../utils/publicUser.js'
+import { saveUploadedImage } from '../middleware/upload.js'
 
 export async function searchUsers(req, res) {
   const query = (req.query.q || '').trim().toLowerCase()
@@ -12,6 +13,7 @@ export async function searchUsers(req, res) {
 
 export async function updateProfile(req, res, next) {
   try {
+    const profilePicture = await saveUploadedImage(req.file)
     const user = await changeDb(db => {
       const current = db.users.find(item => item.id === req.user.id)
       const name = req.body.name?.trim()
@@ -20,7 +22,7 @@ export async function updateProfile(req, res, next) {
       if (db.users.some(item => item.id !== current.id && item.username.toLowerCase() === username.toLowerCase())) throw Object.assign(new Error('این نام کاربری قبلاً استفاده شده است'), { status: 409 })
       current.name = name
       current.username = username
-      if (req.file) current.profilePicture = `/uploads/${req.file.filename}`
+      if (profilePicture) current.profilePicture = profilePicture
       return current
     })
     res.json({ user: publicUser(user) })

@@ -3,6 +3,7 @@ import { addActivity } from '../services/activityService.js'
 import { makeShares } from '../services/expenseService.js'
 import { makeId } from '../utils/id.js'
 import { toCents } from '../utils/money.js'
+import { saveUploadedImage } from '../middleware/upload.js'
 
 function parseParticipants(value) {
   try {
@@ -25,6 +26,7 @@ function expenseInput(req, db) {
 
 export async function createExpense(req, res, next) {
   try {
+    const receiptImage = await saveUploadedImage(req.file)
     const expense = await changeDb(db => {
       const { amountCents, shares } = expenseInput(req, db)
       const created = {
@@ -37,7 +39,7 @@ export async function createExpense(req, res, next) {
         amountCents,
         splitType: req.body.splitType,
         date: req.body.date || new Date().toISOString().slice(0, 10),
-        receiptImage: req.file ? `/uploads/${req.file.filename}` : null,
+        receiptImage,
         createdAt: new Date().toISOString()
       }
       db.expenses.push(created)
@@ -53,6 +55,7 @@ export async function createExpense(req, res, next) {
 
 export async function updateExpense(req, res, next) {
   try {
+    const receiptImage = await saveUploadedImage(req.file)
     const expense = await changeDb(db => {
       const current = db.expenses.find(item => item.id === req.params.expenseId && item.groupId === req.params.groupId)
       if (!current) throw Object.assign(new Error('هزینه پیدا نشد'), { status: 404 })
@@ -63,7 +66,7 @@ export async function updateExpense(req, res, next) {
       current.amountCents = amountCents
       current.splitType = req.body.splitType
       current.date = req.body.date || current.date
-      if (req.file) current.receiptImage = `/uploads/${req.file.filename}`
+      if (receiptImage) current.receiptImage = receiptImage
       db.expenseShares = db.expenseShares.filter(item => item.expenseId !== current.id)
       db.expenseShares.push(...shares.map(item => ({ ...item, expenseId: current.id })))
       addActivity(db, current.groupId, req.user.id, 'expense_edited', `${req.user.name} هزینه «${current.title}» را ویرایش کرد`)

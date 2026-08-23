@@ -21,5 +21,6 @@ export const api = {
 
 export function assetUrl(path) {
   if (!path) return ''
+  if (/^https?:\/\//.test(path)) return path
   return `${baseUrl.replace('/api', '')}${path}`
 }
