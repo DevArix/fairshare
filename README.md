@@ -36,6 +36,8 @@ Copy `backend/.env.example` to `backend/.env` before a real deployment and repla
 
 For durable free deployment storage, set `SUPABASE_URL` and either `SUPABASE_SECRET_KEY` or `SUPABASE_SERVICE_ROLE_KEY` on the backend. The server then keeps its JSON database in the private `fairshare-data` bucket and uploaded images in the public `fairshare-uploads` bucket, creating both buckets automatically. Without these variables, local file storage remains active for development and tests.
 
+The repository also includes a `fairshare-api` Supabase Edge Function and a GitHub Pages workflow for a card-free deployment path. Set the Edge Function secrets `JWT_SECRET`, `CLIENT_URL`, and `APP_URL`, deploy the function with JWT verification disabled, then add its `/functions/v1/fairshare-api/api` URL to the GitHub repository variable `VITE_API_URL`. The frontend uses hash routing so invitation and reset links work from the `/fairshare/` project page.
+
 ## Project structure
 
 ```text

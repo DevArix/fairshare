@@ -7,3 +7,4 @@ backend/uploads/*
 backend/data/db.json
 backend/data/test-db.json
 *.log
+supabase/.temp/

@@ -1,0 +1,11 @@
+{
+  "imports": {
+    "bcryptjs": "npm:bcryptjs@3.0.2",
+    "cors": "npm:cors@2.8.5",
+    "dotenv/config": "npm:dotenv@17.2.2/config",
+    "express": "npm:express@5.1.0",
+    "jsonwebtoken": "npm:jsonwebtoken@9.0.2",
+    "multer": "npm:multer@2.0.2",
+    "nodemailer": "npm:nodemailer@9.0.5"
+  }
+}

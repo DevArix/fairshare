@@ -5,6 +5,7 @@ import Avatar from '../components/Avatar.jsx'
 import CustomSelect from '../components/CustomSelect.jsx'
 import { useApi } from '../hooks/useApi.js'
 import { api } from '../services/api.js'
+import { siteUrl } from '../utils/siteUrl.js'
 
 export default function CreateGroupPage() {
   const { data } = useApi(() => api.get('/friends'), [])
@@ -17,7 +18,7 @@ export default function CreateGroupPage() {
   const [copied, setCopied] = useState(false)
   const [copyError, setCopyError] = useState('')
 
-  const inviteLink = createdGroup ? `${window.location.origin}/invite/${createdGroup.invitationCode}` : ''
+  const inviteLink = createdGroup ? siteUrl(`/invite/${createdGroup.invitationCode}`) : ''
 
   function toggle(id) {
     setSelected(current => current.includes(id) ? current.filter(item => item !== id) : [...current, id])

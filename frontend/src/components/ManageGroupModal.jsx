@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext.jsx'
 import { api } from '../services/api.js'
 import Avatar from './Avatar.jsx'
 import Modal from './Modal.jsx'
+import { siteUrl } from '../utils/siteUrl.js'
 
 export default function ManageGroupModal({ group, friends, onClose, onSaved }) {
   const { user } = useAuth()
@@ -16,7 +17,7 @@ export default function ManageGroupModal({ group, friends, onClose, onSaved }) {
   const ownerId = group.ownerId || group.adminId
   const isOwner = ownerId === user.id
   const isAdmin = group.adminId === user.id
-  const link = `${window.location.origin}/invite/${group.invitationCode}`
+  const link = siteUrl(`/invite/${group.invitationCode}`)
 
   async function act(load) {
     setError('')

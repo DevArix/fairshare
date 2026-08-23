@@ -1,8 +1,16 @@
 import path from 'node:path'
+import process from 'node:process'
 import { makeId } from '../utils/id.js'
 
 const supabaseUrl = (process.env.SUPABASE_URL || '').replace(/\/$/, '')
-const supabaseKey = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+const hostedSecretKeys = (() => {
+  try {
+    return JSON.parse(process.env.SUPABASE_SECRET_KEYS || '{}')
+  } catch {
+    return {}
+  }
+})()
+const supabaseKey = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || hostedSecretKeys.default || ''
 const dataBucket = process.env.SUPABASE_DATA_BUCKET || 'fairshare-data'
 const uploadsBucket = process.env.SUPABASE_UPLOADS_BUCKET || 'fairshare-uploads'
 

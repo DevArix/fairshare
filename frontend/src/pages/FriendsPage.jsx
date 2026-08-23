@@ -4,6 +4,7 @@ import Avatar from '../components/Avatar.jsx'
 import EmptyState from '../components/EmptyState.jsx'
 import { useApi } from '../hooks/useApi.js'
 import { api } from '../services/api.js'
+import { siteUrl } from '../utils/siteUrl.js'
 
 export default function FriendsPage() {
   const { data, loading, error, refresh } = useApi(() => api.get('/friends'), [])
@@ -19,7 +20,7 @@ export default function FriendsPage() {
     api.get('/friends/invite-link').then(value => setInviteCode(value.code)).catch(err => setInviteError(err.message))
   }, [])
 
-  const inviteLink = inviteCode ? `${window.location.origin}/friends/invite/${inviteCode}` : ''
+  const inviteLink = inviteCode ? siteUrl(`/friends/invite/${inviteCode}`) : ''
 
   async function copyInvite() {
     try {
