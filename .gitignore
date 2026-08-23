@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+backend/uploads/*
+!backend/uploads/.gitkeep
+backend/data/db.json
+backend/data/test-db.json
+*.log
