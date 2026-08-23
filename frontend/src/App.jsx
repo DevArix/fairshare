@@ -17,7 +17,7 @@ import SettlementsPage from './pages/SettlementsPage.jsx'
 
 function Protected() {
   const { user, loading } = useAuth()
-  if (loading) return <div className="page-loader"><span className="logo-mark"><img src="/logo.png?v=20260820" alt="" /></span></div>
+  if (loading) return <div className="page-loader"><span className="logo-mark"><img src={`${import.meta.env.BASE_URL}logo.png?v=20260820`} alt="" /></span></div>
   return user ? <AppShell /> : <Navigate to="/login" replace />
 }
 

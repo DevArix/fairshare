@@ -3,7 +3,7 @@ import { ArrowUpRight, Check } from 'lucide-react'
 export default function AuthLayout({ eyebrow, title, subtitle, children }) {
   return (
     <div className="auth-page">
-      <section className="auth-story">        <div className="auth-brand"><span className="logo-mark light"><img src="/logo.png?v=20260820" alt="" /></span><span>فیرشِر</span></div>
+      <section className="auth-story">        <div className="auth-brand"><span className="logo-mark light"><img src={`${import.meta.env.BASE_URL}logo.png?v=20260820`} alt="" /></span><span>فیرشِر</span></div>
         <div className="story-copy">
           <p className="eyebrow light">دنگ‌ها، ساده و شفاف</p>
           <h1>با هم خرج کنید.<br /><em>رفیق بمانید.</em></h1>

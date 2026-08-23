@@ -55,7 +55,7 @@ export default function AppShell() {
   return (
     <div className="app-layout">
       <aside className={`sidebar ${open ? 'open' : ''}`}>
-        <div className="brand"><span className="logo-mark"><img src="/logo.png?v=20260820" alt="" /></span><span>فیرشِر</span></div>
+        <div className="brand"><span className="logo-mark"><img src={`${import.meta.env.BASE_URL}logo.png?v=20260820`} alt="" /></span><span>فیرشِر</span></div>
         <button className="mobile-close" onClick={() => setOpen(false)} aria-label="بستن منو"><X size={20} /></button>
         <nav className="main-nav">
           <p className="nav-label">فضای کار</p>
