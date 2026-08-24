@@ -63,7 +63,7 @@ export default function AppShell() {
         </nav>
         <div className="sidebar-note">
           <span>بد نیست بدانی</span>
-          <p>روی هر مانده بزن تا دقیقاً ببینی از کدام هزینه‌ها ساخته شده است.</p>
+          <p>اگر دنگتو بدی دوستات بیشتر دوستت دارن</p>
         </div>
         <div className="sidebar-user">
           <Link className="sidebar-profile-link" to="/profile" onClick={() => setOpen(false)} aria-label="باز کردن پروفایل">
